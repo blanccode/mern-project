@@ -1,0 +1,47 @@
+.form-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0 auto;
+  width: 90%;
+}
+.dropzone-wrapper {
+  width: 100% !important;
+  margin-bottom: 2em;
+}
+
+.MuiGrid-grid-xs-4 {
+  flex-grow: 0;
+  max-width: 33.333333%;
+  flex-basis: unset !important;
+}
+
+.form-container form {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  width: 100%;
+  margin: 0 auto;
+}
+.inputs {
+  width: 100% !important;
+}
+
+@media (min-width: 75rem) {
+  .form-container {
+    gap: 2em;
+    align-items: flex-start;
+}
+.dropzone-wrapper {
+    width: 70% !important;
+    align-self: flex-start;
+}
+
+
+.form-container form {
+    align-self: flex-start;
+    width: 70%;
+    margin: unset;
+
+}
+}
