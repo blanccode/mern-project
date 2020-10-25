@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const { User } = require("../models/User");
 const multer = require('multer');
 const { auth } = require("../middleware/auth");
+const { Product } = require('../models/Product')
 
 
 //=================================
@@ -27,23 +27,51 @@ var storage = multer.diskStorage({
 
 var upload = multer({ storage: storage }).single('file')
 
-router.get("/uploadImage", (req, res) => {
+router.get("/", (req, res) => {
     res.json({ user: 'tobi' })
     res.end()
 })
 router.post("/uploadImage", (req, res) => {
     //    //saving to server after getting img from client
     //    res.send("post works--------")
-
     upload(req, res, err => {
-        if (err) return res.json({ success: false, err })
         console.log(req.file)
+
+        if (err) {
+            console.log(err)
+            return res.json({ success: false, err })
+        }
         return res.json({ success: true, image: res.req.file.path, fileName: res.req.file.filename })
     })
 
 });
 router.post("/uploadProduct", (req, res) => {
     //    //saving to server after getting formInputs from client
+    // console.log(req)
+
+
+    const product = new Product(req.body)
+
+    product.save((err) => {
+
+        if (err) {
+            console.log(err)
+            return res.json({ success: false }).status(400)
+        }
+        return res.json({ success: true }).status(200)
+    })
+    // console.log(req.body)
+
+    // try {
+    //     const product =  new Product(req.body)
+    //     await product.save()
+    //     res.json({ success: true }).status(200)
+
+
+    // } catch (error) {
+    //     console.log(error)
+    //     res.json({ success: false }).status(400)
+    // }
 });
 
 

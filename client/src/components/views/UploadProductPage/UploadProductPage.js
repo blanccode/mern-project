@@ -21,10 +21,10 @@ const useStyles = makeStyles((theme) => ({
 
 
 
-function UploadProductPage() {
+function UploadProductPage(props) {
 
     const [TitleValue, setTitelValue] = useState("")
-    const [DescriptonValue, setDescriptonValue] = useState("")
+    const [DescriptionValue, setDescriptonValue] = useState("")
     const [PriceValue, setPriceValue] = useState("")
     const [Countity, setCountity] = useState(1)
     const [Images, setImages] = useState([])
@@ -54,21 +54,39 @@ function UploadProductPage() {
 
     const onSubmit = (e) => {
         e.preventDefault();
+
+        if (!TitleValue || !DescriptionValue || !PriceValue ||
+            !Countity || !Images) {
+            return alert('fill all the fields first!')
+        }
+
+        let formData = new FormData();
+        const config = {
+            header: { 'content-type': 'multipart/form-data' }
+        }
+        formData.append("file", Images[0])
+
+        axios.post('/api/product/uploadImage', formData, config)
+
         const inputValues = {
-            titel: TitleValue,
-            description: DescriptonValue,
+            title: TitleValue,
+            description: DescriptionValue,
             price: PriceValue,
             countity: Countity,
             images: Images
         }
+
+        
+           
 
         axios.post('/api/product/uploadProduct', inputValues)
         .then(response => {
             if (response.data.success) {
                 console.log(response.data)
                 alert('product was uploaded successfully')
+                props.history.push('/')
             } else {
-                alert('failed to upload product with axios')
+                alert('failed to upload product')
             }
         })
 
@@ -101,18 +119,6 @@ function UploadProductPage() {
 
                 <TextField
                     className="inputs"
-                    onChange={onDescriptionChange}
-                    value={DescriptonValue}
-                    id="outlined-multiline-static"
-                    label="Beschreibung"
-                    multiline
-                    rows={4}
-                    variant="outlined"
-                />
-
-
-                <TextField
-                    className="inputs"
                     onChange={onPriceChange} value={PriceValue}
                     id="outlined-number"
                     label="Preis"
@@ -133,6 +139,16 @@ function UploadProductPage() {
                     InputLabelProps={{
                         shrink: true,
                     }}
+                    variant="outlined"
+                />
+                <TextField
+                    className="inputs"
+                    onChange={onDescriptionChange}
+                    value={DescriptionValue}
+                    id="outlined-multiline-static"
+                    label="Beschreibung"
+                    multiline
+                    rows={4}
                     variant="outlined"
                 />
 
