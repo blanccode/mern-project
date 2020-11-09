@@ -9,10 +9,10 @@ function DropzoneAreaExample(props) {
 
     const imagesUploadHandler = (images) => {
 
-        console.log(images)
         // console.log(response.data)
         setImages(...Images, images)
         props.refreshFunction(...Images, images) //passed down the state
+        console.log("dropzone log :",images)
 
         // props.refreshFunction([...Images, response.data.image])
     }

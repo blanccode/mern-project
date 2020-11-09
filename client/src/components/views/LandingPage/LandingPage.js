@@ -1,15 +1,25 @@
-import React from 'react'
+import React, {useState, useEffect}  from 'react'
 import { FaCode } from "react-icons/fa";
+import SuccessAlert from '../UploadProductPage/SuccessAlert'
+import ProductCard from './ProductCard'
 
-function LandingPage() {
+
+
+
+
+
+function LandingPage(props) {
+    
+    const [Alert, setAlert] = useState(props.location.state)
+
+
     return (
-        <>
-            <div className="app">
-                <FaCode style={{ fontSize: '4rem' }} /><br />
-                <span style={{ fontSize: '2rem' }}>Let's Start Coding!</span>
-            </div>
-            <div style={{ float: 'right' }}>Thanks For Using This Boiler Plate by John Ahn</div>
-        </>
+       <div style= {{padding: "2em" }}>
+            <SuccessAlert pass={Alert}/>
+
+            <ProductCard/>
+
+        </div>
     )
 }
 

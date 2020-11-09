@@ -48,8 +48,6 @@ router.post("/uploadImage", (req, res) => {
 router.post("/uploadProduct", (req, res) => {
     //    //saving to server after getting formInputs from client
     // console.log(req)
-
-
     const product = new Product(req.body)
 
     product.save((err) => {
@@ -72,6 +70,18 @@ router.post("/uploadProduct", (req, res) => {
     //     console.log(error)
     //     res.json({ success: false }).status(400)
     // }
+});
+router.get("/getProducts", async (req, res) => {
+
+    try {
+        const products = await Product.find()
+        res.json({ success: true, products}).status(200)
+
+    } catch (err) {
+        console.log(err)
+        res.json({ success: false }).status(400)
+
+    }
 });
 
 

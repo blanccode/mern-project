@@ -6,6 +6,9 @@ import { makeStyles } from '@material-ui/core/styles';
 import DropzoneDialogExample from './Dropzone'
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import axios from 'axios';
+import SuccessAlert from '../UploadProductPage/SuccessAlert'
+
+
 
 
 
@@ -28,6 +31,7 @@ function UploadProductPage(props) {
     const [PriceValue, setPriceValue] = useState("")
     const [Countity, setCountity] = useState(1)
     const [Images, setImages] = useState([])
+    const [Alert, setAlert] = useState({message: ""})
 
     const onTitleChange = (e) => {
         setTitelValue(e.currentTarget.value)
@@ -48,7 +52,7 @@ function UploadProductPage(props) {
         }
     }
     const updateImages = (newImages) => {
-        console.log('newImage:',newImages)
+        console.log('newImage:', newImages)
         setImages(newImages)
     }
 
@@ -57,6 +61,7 @@ function UploadProductPage(props) {
 
         if (!TitleValue || !DescriptionValue || !PriceValue ||
             !Countity || !Images) {
+
             return alert('fill all the fields first!')
         }
 
@@ -67,7 +72,15 @@ function UploadProductPage(props) {
         formData.append("file", Images[0])
 
         axios.post('/api/product/uploadImage', formData, config)
+            .then(response => {
+                if (response.data.success) {
+                    console.log(response.data.image)
+                    updateImages(...Images, response.data.image)
+                    console.log(Images)
 
+                }
+
+            })
         const inputValues = {
             title: TitleValue,
             description: DescriptionValue,
@@ -76,19 +89,19 @@ function UploadProductPage(props) {
             images: Images
         }
 
-        
-           
-
         axios.post('/api/product/uploadProduct', inputValues)
-        .then(response => {
-            if (response.data.success) {
-                console.log(response.data)
-                alert('product was uploaded successfully')
-                props.history.push('/')
-            } else {
-                alert('failed to upload product')
-            }
-        })
+            .then(response => {
+                if (response.data.success) {
+                    console.log(response.data)
+                    props.history.push({
+                        pathname: '/',
+                        state: { message: 'success' }
+                    })
+
+                } else {
+                    setAlert({ message: 'error' })
+                }
+            })
 
     }
 
@@ -98,8 +111,11 @@ function UploadProductPage(props) {
 
     return (
         <div className="form-container">
+            
+            {/* <SuccessAlert success={Alert}/> */}
             <h2>Lade Produkt hoch</h2>
 
+            <SuccessAlert pass={Alert} />
 
 
 
@@ -158,7 +174,7 @@ function UploadProductPage(props) {
                     color="default"
                     className={classes.button}
                     startIcon={<CloudUploadIcon />}
-                    label="Submit" 
+                    label="Submit"
                     type="submit"
                 >
                     Upload
